@@ -49,6 +49,38 @@ public class Scanner {
 	}
 	
 	/**
+	 * 指定されたマトリクスから入力マス群をすべて取得する
+	 * @param matrix ナンクロマトリクス
+	 * @return
+	 */
+	protected List<Word> scanWholeWords(List<List<String>> matrix) {
+		List<Word>	words = CollectionsUtil.newArrayList();
+
+		// 縦横同時に走査を行う。
+		// 縦走査はデータ構造がメンドクサイのでスキャンラインとして抜き出す
+		int len = matrix.get(0).size();
+		for ( int i = 0 ; i < len ; i++ ) {
+			words.addAll(scanWords(matrix.get(i)));
+			words.addAll(scanWords(pickScanLine(matrix,i)));
+		}
+		
+		return words;
+	}
+	/**
+	 * 縦ラインからスキャンに容易なスキャンラインを生成する
+	 * @param matrix ナンクロマトリクス
+	 * @param column ぬきだすコラム位置
+	 * @return
+	 */
+	protected List<String> pickScanLine(List<List<String>> matrix, int column) {
+		List<String> scanLine = CollectionsUtil.newArrayList();
+		for ( List<String> line : matrix) {
+			scanLine.add(line.get(column));
+		}
+		return scanLine;
+	}
+	
+	/**
 	 * 指定されたスキャンライン情報から入力欄リストを生成する
 	 * @param scanLine スキャンライン情報
 	 * @return 入力欄情報
@@ -58,10 +90,10 @@ public class Scanner {
 		List<Word> words = CollectionsUtil.newArrayList();
 		
 		for(String e : scanLine) {
-			if ( StringUtil.isEmpty(e)) {
+			if ( StringUtil.isEmpty(e) || StringUtil.isBlank(e) ) {
 				// eが空文字(スペース)の場合
 				// ここで連続する入力欄が途切れているので、ここまでの集合を入力欄としてWordを生成する
-				
+				words.add(Word.create(stack));
 				// 生成後にstackを初期化
 				stack = CollectionsUtil.newArrayList();
 			} else {
@@ -72,6 +104,7 @@ public class Scanner {
 		}
 		if ( stack.size()>0) {
 			// 最後の最後で残っているので、これで入力欄を生成
+			words.add(Word.create(stack));
 		}
 		return words;
 	}
