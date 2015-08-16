@@ -56,12 +56,15 @@ public class Scanner {
 	protected List<Word> scanWholeWords(List<List<String>> matrix) {
 		List<Word>	words = CollectionsUtil.newArrayList();
 
-		// 縦横同時に走査を行う。
+		// 横走査を行う。
+		for ( List<String> scanLine : matrix) {
+			words.addAll(scanWords(scanLine));
+		}
+
 		// 縦走査はデータ構造がメンドクサイのでスキャンラインとして抜き出す
 		int len = matrix.get(0).size();
 		for ( int i = 0 ; i < len ; i++ ) {
-			words.addAll(scanWords(matrix.get(i)));
-			words.addAll(scanWords(pickScanLine(matrix,i)));
+			words.addAll(scanWords(pickVirticalScanLine(matrix,i)));
 		}
 		
 		return words;
@@ -72,7 +75,7 @@ public class Scanner {
 	 * @param column ぬきだすコラム位置
 	 * @return
 	 */
-	protected List<String> pickScanLine(List<List<String>> matrix, int column) {
+	protected List<String> pickVirticalScanLine(List<List<String>> matrix, int column) {
 		List<String> scanLine = CollectionsUtil.newArrayList();
 		for ( List<String> line : matrix) {
 			scanLine.add(line.get(column));
