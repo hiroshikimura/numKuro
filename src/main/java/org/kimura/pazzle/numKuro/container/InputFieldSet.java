@@ -4,21 +4,23 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.kimura.pazzle.numKuro.operator.Finder;
+import org.seasar.framework.util.StringUtil;
 import org.seasar.framework.util.tiger.CollectionsUtil;
 
 /**
  * ナンクロの入力欄の集合
+ * 初期マトリクスから得られた入力欄集合の１つ
  * @author kimura
  *
  */
-public class Word implements Serializable {
+public class InputFieldSet implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public static Word create(List<String> words) {
+	public static InputFieldSet create(List<String> words) {
 		List<Integer> fwd = CollectionsUtil.newArrayList(words.size());
 		List<Integer> rev = CollectionsUtil.newArrayList(words.size());
 		int val;
@@ -27,14 +29,13 @@ public class Word implements Serializable {
 			fwd.set(i, val);
 			rev.set(rev.size()-i-1, val);
 		}
-		Word w = new Word();
+		InputFieldSet w = new InputFieldSet();
 		w.fwdList = fwd;
 		w.revList = rev;
 		return w;
 	}
-	
-	protected Word() {
-		
+
+	protected InputFieldSet() {
 	}
 
 	/**
@@ -52,5 +53,25 @@ public class Word implements Serializable {
 	 */
 	public Finder createFinder(Analyzed a) {
 		return null;
+	}
+	
+	/**
+	 * 入力欄集合の埋まった割合を算出する
+	 * @param a 解答情報
+	 * @return
+	 */
+	public int	fillRatio(Analyzed a) {
+		int cnt = 0;
+		for( Integer pos : fwdList ) {
+			cnt += StringUtil.isNotEmpty( a.map.get(pos - 1)) ? 100 : 0;
+		}
+		return cnt / len() ;
+	}
+	/**
+	 * 入力欄集合のサイズを取得する
+	 * @return
+	 */
+	public int len() {
+		return this.fwdList.size();
 	}
 }

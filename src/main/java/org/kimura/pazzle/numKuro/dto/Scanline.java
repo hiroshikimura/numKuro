@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * @author kimura
  *
  */
-public class Scanline extends ArrayList<Character> {
+public class Scanline<T> extends ArrayList<T> {
 
 	/**
 	 * 

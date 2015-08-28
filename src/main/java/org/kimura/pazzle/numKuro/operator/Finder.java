@@ -5,6 +5,11 @@ package org.kimura.pazzle.numKuro.operator;
  * @author kimura
  *
  */
-public class Finder {
-
+public interface Finder<T> {
+	
+	/**
+	 * 指定された検索条件から必要なクエリを返す
+	 * @return クエリ
+	 */
+	T getQuery();
 }

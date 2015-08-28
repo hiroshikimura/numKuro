@@ -2,43 +2,84 @@ package org.kimura.pazzle.numKuro.dto;
 
 import java.util.ArrayList;
 
-public class Matrix extends ArrayList<Scanline> {
+/**
+ * 初期マトリクス
+ * Scanlineの集合
+ * @author kimura
+ *
+ */
+public class Matrix<T> extends ArrayList<Scanline<T>> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public static Matrix create(int height, int width) {
-		Matrix mat = Matrix.create();
+	/**
+	 * 指定したサイズのマトリクスを生成する
+	 * @param height 高さ
+	 * @param width 幅
+	 * @return
+	 */
+	public static <T> Matrix<T> create(int height, int width) {
+		Matrix<T> mat = Matrix.create();
+		Scanline<T> line;
 		for ( int i = 0 ; i < height ; i++ ) {
-			mat.add(createLine(width));
+			mat.add(line =createLine(width));
 		}
 		return mat;
 	}
-	public static Matrix create(int height) {
-		Matrix mat = Matrix.create();
+	/**
+	 * 指定した高さのマトリクスを生成する
+	 * @param height 高さ
+	 * @return
+	 */
+	public static <T> Matrix<T> create(int height) {
+		Matrix<T> mat = Matrix.create();
+		Scanline<T> line;
 		for ( int i = 0 ; i < height ; i++ ) {
-			mat.add(createLine());
+			mat.add(line=Matrix.createLine());
 		}
 		return mat;
 	}
-	public static Matrix create() {
-		return new Matrix();
+	/**
+	 * 空のマトリクスを生成する。
+	 * @return
+	 */
+	public static <T> Matrix<T> create() {
+		return new Matrix<T>();
 	}
-	public static Scanline createLine(int length) {
-		Scanline line = createLine();
+	/**
+	 * マトリクス中の１行を長さ指定で生成する
+	 * @param length 長さ
+	 * @return
+	 */
+	public static <T> Scanline<T> createLine(int length) {
+		Scanline<T> line = createLine();
 		line.ensureCapacity(length);
 		return line;
 	}
-	public static Scanline createLine() {
-		return new Scanline();
+	/**
+	 * マトリクス中の１行を生成する
+	 * @return
+	 */
+	public static <T> Scanline<T> createLine() {
+		return new Scanline<T>();
 	}
-	
-	public Scanline	get(int index) {
+	/**
+	 * 指定した行を取得する
+	 * @return
+	 */
+	public Scanline<T>	get(int index) {
 		return this.get(index);
 	}
-	public Character get(int row, int col) {
+	/**
+	 * 指定した行/列の文字を取得する
+	 * @param row 行
+	 * @param col 列
+	 * @return
+	 */
+	public T get(int row, int col) {
 		return this.get(row).get(col);
 	}
 }

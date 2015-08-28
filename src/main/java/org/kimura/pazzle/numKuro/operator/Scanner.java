@@ -6,7 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
 
-import org.kimura.pazzle.numKuro.container.Word;
+import org.kimura.pazzle.numKuro.container.InputFieldSet;
 import org.seasar.framework.util.StringUtil;
 import org.seasar.framework.util.tiger.CollectionsUtil;
 import org.supercsv.io.CsvListReader;
@@ -24,7 +24,7 @@ public class Scanner {
 	 * @param filePath ファイルパス
 	 * @return 入力欄リスト
 	 */
-	public List<Word> getWordList(String filePath) {
+	public List<InputFieldSet> getWordList(String filePath) {
 		return null;
 	}
 	
@@ -53,8 +53,8 @@ public class Scanner {
 	 * @param matrix ナンクロマトリクス
 	 * @return
 	 */
-	protected List<Word> scanWholeWords(List<List<String>> matrix) {
-		List<Word>	words = CollectionsUtil.newArrayList();
+	protected List<InputFieldSet> scanWholeWords(List<List<String>> matrix) {
+		List<InputFieldSet>	words = CollectionsUtil.newArrayList();
 
 		// 横走査を行う。
 		for ( List<String> scanLine : matrix) {
@@ -88,15 +88,15 @@ public class Scanner {
 	 * @param scanLine スキャンライン情報
 	 * @return 入力欄情報
 	 */
-	protected	List<Word>	scanWords(List<String> scanLine) {
+	protected	List<InputFieldSet>	scanWords(List<String> scanLine) {
 		List<String> stack = CollectionsUtil.newArrayList();
-		List<Word> words = CollectionsUtil.newArrayList();
+		List<InputFieldSet> words = CollectionsUtil.newArrayList();
 		
 		for(String e : scanLine) {
 			if ( StringUtil.isEmpty(e) || StringUtil.isBlank(e) ) {
 				// eが空文字(スペース)の場合
 				// ここで連続する入力欄が途切れているので、ここまでの集合を入力欄としてWordを生成する
-				words.add(Word.create(stack));
+				words.add(InputFieldSet.create(stack));
 				// 生成後にstackを初期化
 				stack = CollectionsUtil.newArrayList();
 			} else {
@@ -107,7 +107,7 @@ public class Scanner {
 		}
 		if ( stack.size()>0) {
 			// 最後の最後で残っているので、これで入力欄を生成
-			words.add(Word.create(stack));
+			words.add(InputFieldSet.create(stack));
 		}
 		return words;
 	}
